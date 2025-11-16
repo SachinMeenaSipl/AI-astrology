@@ -37,8 +37,25 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Serve frontend
+// Serve frontend (rate limited)
+const mainPageLimiter = {
+  windowMs: 60 * 1000, // 1 minute
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.'
+};
+
+// Apply basic rate limiting to main page
+let requestCounts = {};
+setInterval(() => { requestCounts = {}; }, 60000); // Clear every minute
+
 app.get('/', (req, res) => {
+  const ip = req.ip;
+  requestCounts[ip] = (requestCounts[ip] || 0) + 1;
+  
+  if (requestCounts[ip] > 100) {
+    return res.status(429).json({ error: 'Too many requests' });
+  }
+  
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 

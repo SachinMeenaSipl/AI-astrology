@@ -33,11 +33,11 @@ router.post('/report', async (req, res) => {
 
 /**
  * Calculate Life Path Number
- * GET /api/numerology/life-path
+ * POST /api/numerology/life-path (changed from GET for security)
  */
-router.get('/life-path', async (req, res) => {
+router.post('/life-path', async (req, res) => {
   try {
-    const { dateOfBirth } = req.query;
+    const { dateOfBirth } = req.body;
     
     if (!dateOfBirth) {
       return res.status(400).json({ 
@@ -65,11 +65,11 @@ router.get('/life-path', async (req, res) => {
 
 /**
  * Calculate Personal Year
- * GET /api/numerology/personal-year
+ * POST /api/numerology/personal-year (changed from GET for security)
  */
-router.get('/personal-year', async (req, res) => {
+router.post('/personal-year', async (req, res) => {
   try {
-    const { dateOfBirth } = req.query;
+    const { dateOfBirth } = req.body;
     
     if (!dateOfBirth) {
       return res.status(400).json({ 
